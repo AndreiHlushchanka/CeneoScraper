@@ -33,16 +33,23 @@ selectors = {
 product_code = '95319759'
 # url = 'https://www.ceneo.pl/' + product_code + '#tab=reviews'
 # url = 'https://www.ceneo.pl/{}#tab=reviews'.format(product_code)
-url = f'https://www.ceneo.pl/{product_code}#tab=reviews'
-response = requests.get(url)
-page_dom = BeautifulSoup(response.text, "html.parser")
-opinions = page_dom.select("div.js_product-review")
 all_opinions = []
+url = f'https://www.ceneo.pl/{product_code}#tab=reviews'
+while(url):
+    print(url)
+    response = requests.get(url)
+    page_dom = BeautifulSoup(response.text, "html.parser")
+    opinions = page_dom.select("div.js_product-review")
+    
 for opinion in opinions:
     single_opinion=[]
     for key, value in selectors.items():
         single.opinion[key] = get_element(opinion, *value)
     all_opinions.append(single_opinion)
+try:
+    url = "https://www.ceneo.pl"+get_element(page_dom, "a.pagination__next", "href")
+except TypeError:
+        url=None
 
 with open(f"./opinions/{product_code}.json", "w", encoding="UTF-8") as jf:
     json.dump(all_opinions, jf, indent=4, ensure_ascii=False)
