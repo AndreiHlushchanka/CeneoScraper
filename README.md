@@ -23,3 +23,7 @@
 - Requests
 - BeautifulSoup4
 - Json
+- Pandas
+- Numpy
+- Matplotlib
+- Os
